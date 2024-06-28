@@ -1,0 +1,2 @@
+# Utiliser LF pour les fichiers de script
+*.sh text eol=lf
