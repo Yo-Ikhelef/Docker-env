@@ -1,18 +1,22 @@
 services:
   php:
     image: php:8.3-apache
-    container_name: php-app
+    container_name: php-app-dev
     build:
       context: .
       dockerfile: php.Dockerfile
     volumes:
       - ./php:/var/www/html
+      - ./path/to/certs:/etc/ssl/certs:ro  # certificats
     ports:
-      - "${PHP_PORT}:80"
+      - "${PHP_PORT}:80"  # HTTP
+      - "443:443"         # HTTPS
     depends_on:
       - sqlserver
     env_file:
       - .env
+    environment:
+      - TZ=Europe/Paris
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2019-latest
@@ -23,6 +27,7 @@ services:
     environment:
       - SA_PASSWORD=${SA_PASSWORD}
       - ACCEPT_EULA=Y
+      - TZ=Europe/Paris
     ports:
       - "${DB_PORT}:1433"
     volumes:
