@@ -1,36 +1,19 @@
+version: '3.8'
+
 services:
   php:
-    image: php:8.3-apache
-    container_name: php-app
     build:
       context: .
       dockerfile: php.Dockerfile
+    container_name: php-app
     volumes:
       - ./php:/var/www/html
     ports:
       - "${PHP_PORT}:80"
-    depends_on:
-      - sqlserver
     env_file:
       - .env
-
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    container_name: sqlserver
-    build:
-      context: .
-      dockerfile: db.Dockerfile
     environment:
-      - SA_PASSWORD=${SA_PASSWORD}
-      - ACCEPT_EULA=Y
-    ports:
-      - "${DB_PORT}:1433"
-    volumes:
-      - sqlserver_data:/var/opt/mssql
-      - ./sql-scripts:/usr/src/app/sql-scripts
-      - ./shell-scripts:/shell-scripts
-    env_file:
-      - .env
+      - TZ=Europe/Paris
 
 volumes:
   sqlserver_data:
